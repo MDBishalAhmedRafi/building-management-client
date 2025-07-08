@@ -1,9 +1,24 @@
 import React from 'react';
-import { Link } from 'react-router';
-import { FaUserCircle } from 'react-icons/fa';
+import { Link, NavLink } from 'react-router';
 import { FiLogIn } from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
+import { MdDashboardCustomize } from "react-icons/md";
 import logo from "../../assets/main_logo.png"
+import useAuth from '../../Hooks/UseAuth/UseAuth';
+import { toast } from 'react-toastify';
 const Navbar = () => {
+  const {user, logOut} = useAuth();
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {
+        toast.warn("User has logged out", {
+          position: "top-right",
+          autoClose: 3000,
+          theme: "light",
+        });
+      })
+      .catch(() => {});
+  };
   return (
     <nav className="navbar bg-base-100 shadow-md px-4 md:px-10 py-3 fixed top-0 left-0 w-full z-50">
       {/* Start: Logo */}
@@ -21,16 +36,36 @@ const Navbar = () => {
       </div>
 
       {/* End: Login Dropdown */}
-      <div className="flex-none dropdown dropdown-end">
+      { 
+        user ? <div className="flex-none dropdown dropdown-end">
         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-          <FiLogIn className="text-2xl text-[#ae825b]" />
+            
+              <img
+                src={user.photoURL}
+                alt="User"
+                className="w-9 h-9 rounded-full border border-green-400 p-[2px]"
+              />
+            
         </label>
         <ul tabIndex={0} className="mt-3 z-[1] p-3 shadow-lg menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-          {/* Add your login options here */}
-          <li><a>Register</a></li>
-          <li><a>Admin Panel</a></li>
-        </ul>
-      </div>
+  <li className="text-center text-lg font-semibold text-primary pointer-events-none">
+    {user?.displayName}
+  </li>
+  <li>
+    <Link to="/dashboard">
+      <MdDashboardCustomize className="text-lg" />
+      Dashboard
+    </Link>
+  </li>
+  <li>
+    <button onClick={handleLogOut}>
+      <FiLogOut className="text-lg" />
+      Log Out
+    </button>
+  </li>
+</ul>
+      </div> :  <NavLink to='/login'><FiLogIn className="text-2xl text-[#ae825b]"/></NavLink>
+      }
 
       {/* Mobile Menu */}
       <div className="md:hidden dropdown dropdown-end ml-2">

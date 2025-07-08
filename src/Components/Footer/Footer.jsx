@@ -19,7 +19,7 @@ const Footer = () => {
       viewport={{ once: true }}
       className="bg-base-200 text-base-content px-4 md:px-20 py-10"
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start" data-aos="fade-up">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start" data-aos="fade-right">
         {/* Brand Info */}
         <div>
           <Link to="/" className="flex items-center gap-2 mb-4">
