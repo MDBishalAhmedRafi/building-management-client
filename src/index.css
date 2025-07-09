@@ -1,2 +1,9 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+.active{
+                font-weight: bold;
+                color: #c79d77;
+                border-bottom: 2px solid #c79d77;
+                
+}

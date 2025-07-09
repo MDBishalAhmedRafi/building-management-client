@@ -20,7 +20,7 @@ const Navbar = () => {
       .catch(() => {});
   };
   return (
-    <nav className="navbar bg-base-100 shadow-md px-4 md:px-10 py-3 fixed top-0 left-0 w-full z-50">
+    <nav className="navbar bg-base-100 shadow-md px-4 md:px-10 py-3 fixed top-0 left-0 w-full z-[2000]">
       {/* Start: Logo */}
       <div className="flex-1">
         <Link to="/" className="flex items-center space-x-2">
@@ -31,8 +31,8 @@ const Navbar = () => {
 
       {/* Center: Links */}
       <div className="hidden md:flex space-x-6">
-        <Link to="/" className="text-base font-medium hover:text-[#c79d77] transition">Home</Link>
-        <Link to="/apartment" className="text-base font-medium hover:text-[#c79d77] transition">Apartment</Link>
+        <NavLink to="/" className="text-base font-medium hover:text-[#c79d77] transition">Home</NavLink>
+        <NavLink to="/apartment" className="text-base font-medium hover:text-[#c79d77] transition">Apartment</NavLink>
       </div>
 
       {/* End: Login Dropdown */}
@@ -43,7 +43,7 @@ const Navbar = () => {
               <img
                 src={user.photoURL}
                 alt="User"
-                className="w-9 h-9 rounded-full border border-green-400 p-[2px]"
+                className="w-9 h-9 rounded-full border border-[#c79d77] p-[2px]"
               />
             
         </label>
@@ -52,10 +52,10 @@ const Navbar = () => {
     {user?.displayName}
   </li>
   <li>
-    <Link to="/dashboard">
+    <NavLink to="/dashboard">
       <MdDashboardCustomize className="text-lg" />
       Dashboard
-    </Link>
+    </NavLink>
   </li>
   <li>
     <button onClick={handleLogOut}>
@@ -64,7 +64,7 @@ const Navbar = () => {
     </button>
   </li>
 </ul>
-      </div> :  <NavLink to='/login'><FiLogIn className="text-2xl text-[#ae825b]"/></NavLink>
+      </div> :  <Link to='/login'><FiLogIn className="text-2xl text-[#ae825b]"/></Link>
       }
 
       {/* Mobile Menu */}
@@ -75,8 +75,8 @@ const Navbar = () => {
           </svg>
         </label>
         <ul tabIndex={1} className="menu menu-sm dropdown-content mt-3 z-[1] p-3 shadow-lg bg-base-100 rounded-box w-52">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/apartment">Apartment</Link></li>
+          <li><NavLink to="/">Home</NavLink></li>
+          <li><NavLink to="/apartment">Apartment</NavLink></li>
         </ul>
       </div>
     </nav>

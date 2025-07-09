@@ -1,15 +1,17 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { FcGoogle } from "react-icons/fc";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // 👈 Import icons
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { AuthContext } from "../../Provider/AuthProvider";
+import Lottie from "lottie-react";
+import loginAnimation from "../../assets/register.json";
+import useAuth from "../../Hooks/UseAuth/UseAuth";
 
 const Register = () => {
-  const {user, createUser, setUser, googleLogIn, updateUser } = use(AuthContext);
+  const { user, createUser, setUser, googleLogIn, updateUser } = useAuth();
   const [passError, setPassError] = useState("");
-  const [showPassword, setShowPassword] = useState(false); 
-  const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -20,23 +22,14 @@ const Register = () => {
     const email = form.email.value;
     const photo = form.photo.value;
     const password = form.password.value;
-    console.log({ name, email, photo, password });
 
     if (!hasUppercase.test(password)) {
       setPassError("Password should have an uppercase letter.");
       return;
-    } else {
-      setPassError("");
-    }
-
-    if (!hasLowercase.test(password)) {
+    } else if (!hasLowercase.test(password)) {
       setPassError("Password should have a lowercase letter.");
       return;
-    } else {
-      setPassError("");
-    }
-
-    if (password.length < 6) {
+    } else if (password.length < 6) {
       setPassError("Password should be more than 6 characters.");
       return;
     } else {
@@ -45,62 +38,44 @@ const Register = () => {
 
     createUser(email, password)
       .then(() => {
-        toast.success('User have Register Successfully', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                });
-                // const user =user;
+        toast.success("User Registered Successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          theme: "light",
+        });
+
         updateUser({ displayName: name, photoURL: photo })
           .then(() => {
             setUser({ ...user, displayName: name, photoURL: photo });
-             
-            navigate("/")
+            navigate("/");
           })
           .catch(() => {
-             
             setUser(user);
-            
           });
       })
-      .catch((error) => {
-        console.log(error)
-         toast.warn('There is a problem with register User', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                });
+      .catch(() => {
+        toast.warn("There is a problem with registering the user", {
+          position: "top-right",
+          autoClose: 5000,
+          theme: "light",
+        });
       });
-      
   };
 
   const handleGoogle = () => {
     googleLogIn()
       .then(() => {
-       
-        navigate("/")
+        navigate("/");
       })
-      .catch(() => {
-        
-      });
-      
+      .catch(() => {});
   };
 
   return (
-    <div className="lg:w-11/12 lg:mx-auto mx-2">
-      <div className="min-h-screen bg-gradient-to-r from-red-200 via-orange to-orange-200 lg:mb-10 md:mb-7 mb-5  flex items-center justify-center rounded-2xl">
-        <div className="bg-white shadow-md rounded-xl p-8 w-full max-w-md">
-          <h2 className="text-2xl font-semibold text-center text-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-base-200 to-base-100 flex items-center justify-center px-4 py-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center max-w-6xl w-full shadow-xl rounded-xl p-6 md:p-12">
+        {/* Register Form */}
+        <div>
+          <h2 className="text-3xl font-bold text-center text-[#987b53]">
             Register Your Account
           </h2>
           <div className="border-b border-gray-300 mt-2 mb-6 relative">
@@ -114,7 +89,7 @@ const Register = () => {
               name="name"
               placeholder="Enter Your Name"
               required
-              className="text-gray-800 w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="input w-full"
             />
             {/* Email */}
             <input
@@ -122,7 +97,7 @@ const Register = () => {
               name="email"
               placeholder="Enter Your Email"
               required
-              className="text-gray-800 w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="input  w-full"
             />
             {/* Photo URL */}
             <input
@@ -130,25 +105,24 @@ const Register = () => {
               name="photo"
               placeholder="Photo Url"
               required
-              className="text-gray-800 w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="input  w-full"
             />
 
-            {/* Password with Eye Toggle */}
+            {/* Password */}
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Type Your Password"
                 required
-                className="text-gray-800 w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-12"
+                className="input input-bordered w-full pr-12"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute cursor-pointer right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-800"
-                tabIndex={-1}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 cursor-pointer"
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                {showPassword ? <FaEyeSlash /> : <FaEye  />}
               </button>
             </div>
 
@@ -157,31 +131,39 @@ const Register = () => {
               <button
                 type="button"
                 onClick={handleGoogle}
-                className="btn btn-outline btn-secondary w-full flex items-center justify-center gap-2"
+                className="btn btn-outline border-[#987b53] w-full flex items-center gap-2 justify-center"
               >
                 <FcGoogle size={24} />
                 Register With Google
               </button>
             </div>
 
-            {/* Password Error */}
             {passError && <p className="text-red-500">{passError}</p>}
 
             {/* Submit */}
             <button
               type="submit"
-              className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md transition font-bold"
+              className="btn btn-primary bg-[#987b5380] hover:bg-[#987b53] font-bold border-gray-300 w-full"
             >
               Register
             </button>
           </form>
 
           <p className="text-center text-sm text-gray-600 mt-6">
-            Do you have an account?{" "}
-            <Link to="/login" className="text-blue-600 font-bold hover:underline">
+            Already have an account?{" "}
+            <Link to="/login" className="text-[#987b53] font-bold hover:underline">
               Login
             </Link>
           </p>
+        </div>
+
+        {/* Lottie Animation */}
+        <div className="flex justify-center items-center">
+          <Lottie
+            animationData={loginAnimation}
+            loop
+            className="w-72 md:w-96 h-auto"
+          />
         </div>
       </div>
     </div>
