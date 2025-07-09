@@ -28,7 +28,7 @@ const ApartmentMap = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
       viewport={{ once: true }}
-      className="px-4 md:px-20 py-16"
+      className="px-4 md:px-20 py-16 bg-gradient-to-br from-base-200 to-base-100"
     >
       <div className="">
         <h2
