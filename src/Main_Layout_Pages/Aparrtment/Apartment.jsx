@@ -174,10 +174,13 @@ import useAuth from "../../Hooks/UseAuth/useAuth.jsx";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import Loading from "../Loading/Loading.jsx";
+import { useLocation, useNavigate } from "react-router";
 
 const Apartment = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const navigate = useNavigate();
+const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const [hasAgreed, setHasAgreed] = useState(false);
   const [agreedId, setAgreedId] = useState(null);
@@ -230,9 +233,10 @@ const Apartment = () => {
   };
 
   const handleAgreement = async (apt) => {
-    if (!user) {
-      return toast.error("You must be logged in to agree.");
-    }
+  if (!user) {
+    toast.error("You must be logged in to agree.");
+    return navigate("/login", { state: { from: location.pathname } });
+  }
 
     if (hasAgreed) {
       return toast.error("You have already agreed to an apartment.");
