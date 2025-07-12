@@ -171,7 +171,6 @@ const Login = () => {
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-
     logIn(email, password)
       .then(() => {
         toast.success("User has Successfully Logged In", {
@@ -179,7 +178,7 @@ const Login = () => {
           autoClose: 3000,
           theme: "light",
         });
-        navigate(location?.state ? location.state : "/");
+        navigate(location?.state?.from ? location.state?.from : "/");
       })
       .catch((error) => {
         setError(error.code);
@@ -194,7 +193,7 @@ const Login = () => {
   const handleGoogleLog = () => {
     googleLogIn()
       .then(() => {
-        navigate(location?.state ? location.state : "/");
+        navigate(location?.state?.from ? location.state?.from : "/");
       })
       .catch((error) => {
         setError(error.code);
