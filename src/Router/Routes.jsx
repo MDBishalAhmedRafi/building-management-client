@@ -12,8 +12,12 @@ import ManageMembers from "../DashBoard_Layout_Pages/ManageMembers/ManageMembers
 import MakeAnnouncement from "../DashBoard_Layout_Pages/MakeAnnouncement/MakeAnnouncement";
 import AgreementRequests from "../DashBoard_Layout_Pages/AgreementRequests/AgreementRequests";
 import ManageCoupons from "../DashBoard_Layout_Pages/ManageCoupons/ManageCoupons";
-// import MemberProfile from "../DashBoard_Layout_Pages/Member_Pages/MemberProfile";
-// import MakePayment from "../DashBoard_Layout_Pages/MakePayment/MakePayment";
+import RoleRoute from "../Provider/RoleRoute";
+import MemberDashboardLayout from "../Layouts/Member_DashBoard_Layout/MemberDashboardLayout";
+import MemberProfile from "../DashBoard_Layout_Pages/Member_Pages/MemberProfile";
+import MakePayment from "../DashBoard_Layout_Pages/MakePayment/MakePayment";
+import PaymentHistory from "../DashBoard_Layout_Pages/Member_Pages/PaymentHistory"
+import MemberAnnouncement from "../DashBoard_Layout_Pages/Member_Pages/MemberAnnouncement"
 
 const router = createBrowserRouter([
   {
@@ -43,9 +47,9 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: (
       <PrivateRoute>
-        {/* <AdminRoute> */}
-          <DashBoardLayout />
-        {/* </AdminRoute> */}
+          <RoleRoute allowedRoles={['admin']}>
+            <DashBoardLayout />
+          </RoleRoute>
       </PrivateRoute>
     ),
     children: [
@@ -57,5 +61,38 @@ const router = createBrowserRouter([
 
     ],
   },
+  // ✅ Member dashboard
+{
+  path: "/member-dashboard",
+  element: (
+    <PrivateRoute>
+      <RoleRoute allowedRoles={['member']}>
+        <MemberDashboardLayout />
+      </RoleRoute>
+    </PrivateRoute>
+  ),
+  children: [
+    { index: true, path: "profile", element: <MemberProfile /> },
+    { path: "make-payment", element: <MakePayment /> },
+    { path: "payment-history", element: <PaymentHistory /> },
+    { path: "announcements", element: <MemberAnnouncement /> },
+  ],
+},
+
+// // ✅ User dashboard
+// {
+//   path: "/user-dashboard",
+//   element: (
+//     <PrivateRoute>
+//       <RoleRoute allowedRoles={['user']}>
+//         <UserDashboardLayout />
+//       </RoleRoute>
+//     </PrivateRoute>
+//   ),
+//   children: [
+//     { index: true, path: "profile", element: <UserProfile /> },
+//     { path: "announcements", element: <UserAnnouncements /> },
+//   ],
+// },
 ]);
 export default router;
