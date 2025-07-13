@@ -5,6 +5,7 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recha
 import AOS from "aos";
 import "aos/dist/aos.css";
 import useAuth from "../../Hooks/UseAuth/UseAuth";
+import Loading from "../../Main_Layout_Pages/Loading/Loading";
 
 
 const AdminProfile = () => {
@@ -37,7 +38,7 @@ const AdminProfile = () => {
 
   const COLORS = ["#BBF7D0", "#FECACA"]; // green and red shades
 
-  if (isLoading) return <p className="text-center py-20">Loading...</p>;
+  if (isLoading) return <Loading></Loading>;
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto">

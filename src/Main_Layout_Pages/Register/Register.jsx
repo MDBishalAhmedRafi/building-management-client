@@ -6,14 +6,32 @@ import { toast } from "react-toastify";
 import Lottie from "lottie-react";
 import loginAnimation from "../../assets/register.json";
 import useAuth from "../../Hooks/UseAuth/UseAuth";
+import useAxiosSecure from "../../Hooks/UseAxios/useAxiosSecure";
+import { useMutation } from "@tanstack/react-query";
 
 const Register = () => {
-  const { user, createUser, setUser, googleLogIn, updateUser } = useAuth();
-  const [passError, setPassError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const { createUser, updateUser, googleLogIn, setUser } = useAuth();
+  const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const [passError, setPassError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Mutation to save user info to backend
+  const saveUserMutation = useMutation(
+   
+    {
+      mutationFn:  (userData) => axiosSecure.post("/users", userData),
+      onSuccess: () => {
+        toast.success("User saved successfully!", { position: "top-right" });
+      },
+      onError: () => {
+        toast.error("Failed to save user info.", { position: "top-right" });
+      },
+    }
+  );
+
+  const handleRegister = async (e) => {
     e.preventDefault();
     const hasUppercase = /[A-Z]/;
     const hasLowercase = /[a-z]/;
@@ -36,38 +54,51 @@ const Register = () => {
       setPassError("");
     }
 
-    createUser(email, password)
-      .then(() => {
-        toast.success("User Registered Successfully", {
-          position: "top-right",
-          autoClose: 5000,
-          theme: "light",
-        });
+    try {
+      const userCredential = await createUser(email, password);
+      await updateUser({ displayName: name, photoURL: photo });
+      setUser({ ...userCredential.user, displayName: name, photoURL: photo });
 
-        updateUser({ displayName: name, photoURL: photo })
-          .then(() => {
-            setUser({ ...user, displayName: name, photoURL: photo });
-            navigate("/");
-          })
-          .catch(() => {
-            setUser(user);
-          });
-      })
-      .catch(() => {
-        toast.warn("There is a problem with registering the user", {
-          position: "top-right",
-          autoClose: 5000,
-          theme: "light",
-        });
+      // Save user to backend with default role 'user'
+      saveUserMutation.mutate({
+        email,
+        name,
+        photoURL: photo,
+        role: "user",
       });
+
+      toast.success("User Registered Successfully", {
+        position: "top-right",
+      });
+      navigate("/");
+    } catch (error) {
+      toast.error("Registration failed. Try again.", {
+        position: "top-right",
+      });
+    }
   };
 
-  const handleGoogle = () => {
-    googleLogIn()
-      .then(() => {
-        navigate("/");
-      })
-      .catch(() => {});
+  const handleGoogle = async () => {
+    try {
+      const result = await googleLogIn();
+      const loggedUser = result.user;
+
+      setUser(loggedUser);
+
+      // Save Google user to backend with default role 'user'
+      saveUserMutation.mutate({
+        email: loggedUser.email,
+        name: loggedUser.displayName || "Google User",
+        photoURL: loggedUser.photoURL,
+        role: "user",
+      });
+
+      navigate("/");
+    } catch (error) {
+      toast.error("Google login failed. Try again.", {
+        position: "top-right",
+      });
+    }
   };
 
   return (
@@ -83,7 +114,6 @@ const Register = () => {
           </div>
 
           <form onSubmit={handleRegister} className="space-y-4">
-            {/* Name */}
             <input
               type="text"
               name="name"
@@ -91,24 +121,21 @@ const Register = () => {
               required
               className="input w-full"
             />
-            {/* Email */}
             <input
               type="email"
               name="email"
               placeholder="Enter Your Email"
               required
-              className="input  w-full"
+              className="input w-full"
             />
-            {/* Photo URL */}
             <input
               type="text"
               name="photo"
               placeholder="Photo Url"
               required
-              className="input  w-full"
+              className="input w-full"
             />
 
-            {/* Password */}
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -122,11 +149,10 @@ const Register = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 cursor-pointer"
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye  />}
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
 
-            {/* Google Button */}
             <div className="space-y-3">
               <button
                 type="button"
@@ -140,7 +166,6 @@ const Register = () => {
 
             {passError && <p className="text-red-500">{passError}</p>}
 
-            {/* Submit */}
             <button
               type="submit"
               className="btn btn-primary bg-[#987b5380] hover:bg-[#987b53] font-bold border-gray-300 w-full"
@@ -151,7 +176,10 @@ const Register = () => {
 
           <p className="text-center text-sm text-gray-600 mt-6">
             Already have an account?{" "}
-            <Link to="/login" className="text-[#987b53] font-bold hover:underline">
+            <Link
+              to="/login"
+              className="text-[#987b53] font-bold hover:underline"
+            >
               Login
             </Link>
           </p>
@@ -159,11 +187,7 @@ const Register = () => {
 
         {/* Lottie Animation */}
         <div className="flex justify-center items-center">
-          <Lottie
-            animationData={loginAnimation}
-            loop
-            className="w-72 md:w-96 h-auto"
-          />
+          <Lottie animationData={loginAnimation} loop className="w-72 md:w-96 h-auto" />
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import Loading from "../../Main_Layout_Pages/Loading/Loading";
 
 const ManageCoupons = () => {
   const axiosSecure = useAxiosSecure();
@@ -93,7 +94,7 @@ const ManageCoupons = () => {
             ))}
           </tbody>
         </table>
-        {isLoading && <p className="text-center py-6">Loading...</p>}
+        {isLoading && <Loading></Loading>}
       </div>
 
       {/* Modal */}

@@ -4,7 +4,8 @@ import useRole from "../Hooks/UserRole/useRole";
 import Loading from "../Main_Layout_Pages/Loading/Loading";
 import useAuth from "../Hooks/UseAuth/UseAuth";
 
-const AdminRoute = ({ children }) => {
+
+const MemberRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const [role, isRoleLoading] = useRole();
   const location = useLocation();
@@ -13,11 +14,11 @@ const AdminRoute = ({ children }) => {
     return <Loading></Loading>;
   }
 
-  if (user && role === "admin") {
+  if (user && role === "member") {
     return children;
   }
 
   return <Navigate to="/" state={{ from: location }} replace />;
 };
 
-export default AdminRoute;
+export default MemberRoute;
