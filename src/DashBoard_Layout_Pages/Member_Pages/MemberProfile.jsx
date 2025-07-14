@@ -1,4 +1,3 @@
-
 import useAxiosSecure from "../../Hooks/UseAxios/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -19,7 +18,7 @@ const MemberProfile = () => {
 
   return (
     <motion.div
-      className="max-w-xl mx-auto bg-white shadow-lg p-6 rounded-lg"
+      className="max-w-xl mx-auto shadow-lg p-6 rounded-lg"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
@@ -39,10 +38,10 @@ const MemberProfile = () => {
             : "None"}
         </p>
         <p>
-          <strong>Block:</strong> {agreement?.block || "None"}
+          <strong>Block:</strong> {agreement?.blockName || "None"}
         </p>
         <p>
-          <strong>Floor:</strong> {agreement?.floor || "None"}
+          <strong>Floor:</strong> {agreement?.floorNo || "None"}
         </p>
         <p>
           <strong>Room No:</strong> {agreement?.apartmentNo || "None"}

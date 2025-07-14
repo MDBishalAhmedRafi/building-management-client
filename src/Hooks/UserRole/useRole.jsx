@@ -11,7 +11,6 @@ const useRole = () => {
     enabled: !!user?.email && !loading, // run only if user is logged in and auth is not loading
     queryFn: async () => {
       const res = await axiosSecure.get(`/users/role/${user.email}`);
-      console.log(res.data)
       return res.data.role || 'user';
     },
   });

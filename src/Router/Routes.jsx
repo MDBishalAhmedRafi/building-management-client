@@ -18,6 +18,11 @@ import MemberProfile from "../DashBoard_Layout_Pages/Member_Pages/MemberProfile"
 import MakePayment from "../DashBoard_Layout_Pages/MakePayment/MakePayment";
 import PaymentHistory from "../DashBoard_Layout_Pages/Member_Pages/PaymentHistory"
 import MemberAnnouncement from "../DashBoard_Layout_Pages/Member_Pages/MemberAnnouncement"
+import UserDashboardLayout from "../Layouts/User_Dashborad_Layout/UserDashboardLayout";
+import UserProfile from "../DashBoard_Layout_Pages/User_Pages/UserProfile";
+import UserAnnouncements from "../DashBoard_Layout_Pages/User_Pages/UserAnnouncement";
+import CheckoutForm from "../Payment/CheckoutForm"
+
 
 const router = createBrowserRouter([
   {
@@ -58,6 +63,7 @@ const router = createBrowserRouter([
       { path: "announcement", element: <MakeAnnouncement /> },
       { path: "agreement-requests", element: <AgreementRequests /> },
       { path: "manage-coupons", element: <ManageCoupons /> },
+      
 
     ],
   },
@@ -76,23 +82,28 @@ const router = createBrowserRouter([
     { path: "make-payment", element: <MakePayment /> },
     { path: "payment-history", element: <PaymentHistory /> },
     { path: "announcements", element: <MemberAnnouncement /> },
+    {
+  path: "payment-checkout",
+  element: <CheckoutForm />,
+}
+
   ],
 },
 
 // // ✅ User dashboard
-// {
-//   path: "/user-dashboard",
-//   element: (
-//     <PrivateRoute>
-//       <RoleRoute allowedRoles={['user']}>
-//         <UserDashboardLayout />
-//       </RoleRoute>
-//     </PrivateRoute>
-//   ),
-//   children: [
-//     { index: true, path: "profile", element: <UserProfile /> },
-//     { path: "announcements", element: <UserAnnouncements /> },
-//   ],
-// },
+{
+  path: "/user-dashboard",
+  element: (
+    <PrivateRoute>
+      <RoleRoute allowedRoles={['user']}>
+        <UserDashboardLayout />
+      </RoleRoute>
+    </PrivateRoute>
+  ),
+  children: [
+    { index: true, path: "profile", element: <UserProfile /> },
+    { path: "announcements", element: <UserAnnouncements /> },
+  ],
+},
 ]);
 export default router;

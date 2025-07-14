@@ -6,8 +6,14 @@ import { MdDashboardCustomize } from "react-icons/md";
 import logo from "../../assets/main_logo.png"
 import useAuth from '../../Hooks/UseAuth/UseAuth';
 import { toast } from 'react-toastify';
+import useRole from '../../Hooks/UserRole/useRole';
+import Loading from '../../Main_Layout_Pages/Loading/Loading';
 const Navbar = () => {
   const {user, logOut} = useAuth();
+  const { role, isLoading: roleLoading } = useRole();
+  if(roleLoading) { 
+    return <Loading></Loading>;
+  }
   const handleLogOut = () => {
     logOut()
       .then(() => {
@@ -52,10 +58,18 @@ const Navbar = () => {
     {user?.displayName}
   </li>
   <li>
-    <NavLink to="/dashboard">
+    {role === 'admin' && <NavLink to="/dashboard">
       <MdDashboardCustomize className="text-lg" />
       Dashboard
-    </NavLink>
+    </NavLink>}
+    {role === 'member' && <NavLink to="/member-dashboard">
+      <MdDashboardCustomize className="text-lg" />
+      Dashboard
+    </NavLink>}
+    {role === 'user' && <NavLink to="/user-dashboard">
+      <MdDashboardCustomize className="text-lg" />
+      Dashboard
+    </NavLink>}
   </li>
   <li>
     <button onClick={handleLogOut}>

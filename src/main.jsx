@@ -12,7 +12,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
 const queryClient = new QueryClient();
-const stripePromise = loadStripe(import.meta.env.Vite_Strip_key);
+const stripePromise = loadStripe(import.meta.env.VITE_Strip_key);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

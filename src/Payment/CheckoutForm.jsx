@@ -1,96 +1,114 @@
 import React, { useEffect, useState } from "react";
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import useAxiosSecure from "../../Hooks/UseAxios/useAxiosSecure";
-import { useAuth } from "../../Hooks/useAuth/useAuth";
+import {
+  CardElement,
+  useElements,
+  useStripe,
+} from "@stripe/react-stripe-js";
+import useAxiosSecure from "../Hooks/UseAxios/useAxiosSecure";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
+import useAuth from "../Hooks/UseAuth/UseAuth";
 
-const CheckoutForm = ({ selectedApartment, price, month }) => {
+const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [clientSecret, setClientSecret] = useState("");
   const [processing, setProcessing] = useState(false);
+  const [error, setError] = useState("");
 
+  // Read payment data passed via localStorage
+  const paymentData = JSON.parse(localStorage.getItem("paymentData") || "{}");
+  const amount = paymentData.finalAmount || 0;
+
+  // Create payment intent on backend and get clientSecret
   useEffect(() => {
-    if (price > 0) {
-      axiosSecure.post("/create-payment-intent", { price }).then((res) => {
-        setClientSecret(res.data.clientSecret);
-      });
+    if (amount) {
+      axiosSecure
+        .post("/create-payment-intent", { amount })
+        .then((res) => setClientSecret(res.data.clientSecret))
+        .catch(() => setError("Failed to initialize payment."));
     }
-  }, [price, axiosSecure]);
+  }, [amount, axiosSecure]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(""); // Clear previous errors
 
-    if (!stripe || !elements) return;
+    if (!stripe || !elements || !clientSecret) {
+      setError("Payment system not ready");
+      return;
+    }
 
     const card = elements.getElement(CardElement);
-    if (!card) return;
+    if (!card) {
+      setError("Card element not found");
+      return;
+    }
 
     setProcessing(true);
 
-    const { paymentMethod, error } = await stripe.createPaymentMethod({
+    // Create payment method
+    const { error: paymentMethodError } = await stripe.createPaymentMethod({
       type: "card",
       card,
     });
 
-    if (error) {
-      console.error("Payment Method Error:", error);
+    if (paymentMethodError) {
+      setError(paymentMethodError.message);
       setProcessing(false);
       return;
     }
 
-    const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(
-      clientSecret,
-      {
-        payment_method: {
-          card,
-          billing_details: {
-            name: user?.displayName || "Anonymous",
-            email: user?.email || "unknown@example.com",
-          },
+    // Confirm card payment
+    const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card,
+        billing_details: {
+          name: user?.displayName || "Anonymous",
+          email: user?.email || "unknown",
         },
-      }
-    );
+      },
+    });
 
     if (confirmError) {
-      console.error("Confirm Payment Error:", confirmError);
+      setError(confirmError.message);
       setProcessing(false);
       return;
     }
 
+    // Handle successful payment
     if (paymentIntent.status === "succeeded") {
-      const payment = {
-        email: user?.email,
-        transactionId: paymentIntent.id,
-        amount: price,
+      const paymentInfo = {
+        email: paymentData.email,
+        floor: paymentData.floor,
+        block: paymentData.block,
+        room: paymentData.room,
+        rent: paymentData.rent,
+        paidAmount: amount,
+        month: paymentData.month,
         date: new Date(),
-        floor: selectedApartment?.floor || "N/A",
-        block: selectedApartment?.block || "N/A",
-        apartment: selectedApartment?.roomNo || "N/A",
-        month,
+        transactionId: paymentIntent.id,
       };
 
-      const res = await axiosSecure.post("/payments", payment);
-
-      if (res.data?.insertedId) {
-        Swal.fire({
-          title: "Payment Successful!",
-          html: `
-            <div style="text-align: left;">
-              <p><strong>Amount:</strong> $${price}</p>
-              <p><strong>Email:</strong> ${user?.email}</p>
-              <p><strong>Transaction ID:</strong> ${paymentIntent.id}</p>
-              <p><strong>Room:</strong> ${selectedApartment?.roomNo || "N/A"}</p>
-              <p><strong>Month:</strong> ${month}</p>
-            </div>
-          `,
-          icon: "success",
-          confirmButtonText: "OK",
-          confirmButtonColor: "#987b53",
-        });
+      try {
+        const res = await axiosSecure.post("/payments", paymentInfo);
+        if (res.data.insertedId) {
+          Swal.fire({
+            icon: "success",
+            title: "Payment Successful",
+            text: `Transaction ID: ${paymentIntent.id}`,
+          });
+          localStorage.removeItem("paymentData");
+          navigate("/member-dashboard/payment-history");
+        } else {
+          setError("Failed to save payment information.");
+        }
+      } catch {
+        setError("Error saving payment information.");
       }
     }
 
@@ -98,31 +116,26 @@ const CheckoutForm = ({ selectedApartment, price, month }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto p-4 bg-white rounded-xl shadow-lg">
-      <CardElement
-        options={{
-          style: {
-            base: {
-              fontSize: "16px",
-              color: "#424770",
-              '::placeholder': {
-                color: "#aab7c4",
-              },
+    <div className="max-w-lg mx-auto p-6 rounded shadow mt-10">
+      <form onSubmit={handleSubmit}>
+        <CardElement
+          options={{
+            style: {
+              base: { fontSize: "16px", color: "#32325d" },
+              invalid: { color: "#fa755a" },
             },
-            invalid: {
-              color: "#9e2146",
-            },
-          },
-        }}
-      />
-      <button
-        type="submit"
-        disabled={!stripe || !clientSecret || processing}
-        className="mt-6 w-full bg-[#987b53] text-white py-2 rounded-md hover:bg-[#a6895b] transition"
-      >
-        {processing ? "Processing..." : `Pay $${price}`}
-      </button>
-    </form>
+          }}
+        />
+        <button
+          className="btn btn-primary w-full mt-4"
+          type="submit"
+          disabled={!stripe || !clientSecret || processing}
+        >
+          {processing ? "Processing..." : `Pay $${amount}`}
+        </button>
+        {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
+      </form>
+    </div>
   );
 };
 

@@ -28,7 +28,7 @@ const MemberAnnouncement = () => {
         {announcements.map(({ _id, title, message, createdAt }) => (
           <li
             key={_id}
-            className="bg-white p-4 rounded shadow mb-4 border-l-4 border-blue-600"
+            className="p-4 rounded shadow mb-4 border-l-4 border-blue-600"
           >
             <h4 className="text-xl font-semibold">{title}</h4>
             <p className="mt-2">{message}</p>

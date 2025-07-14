@@ -1,56 +1,63 @@
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/UseAxios/useAxiosSecure";
 import { motion } from "framer-motion";
 import useAuth from "../../Hooks/UseAuth/UseAuth";
 
 const PaymentHistory = () => {
-  const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const { user } = useAuth();
 
-  const { data: payments = [] } = useQuery({
-    queryKey: ["payment-history", user?.email],
-    enabled: !!user?.email,
+  const { data: payments = [], isLoading } = useQuery({
+    queryKey: ["payments", user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/payments?email=${user.email}`);
+      const res = await axiosSecure.get(`/payments/user/${user.email}`);
       return res.data;
     },
+    enabled: !!user?.email, // Only run when email exists
   });
 
   return (
     <motion.div
-      className="overflow-x-auto"
-      initial={{ opacity: 0, y: 15 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
+      exit={{ opacity: 0 }}
+      className="p-4 md:p-10 max-w-6xl mx-auto"
     >
-      <h2 className="text-3xl font-semibold mb-6 text-center">Payment History</h2>
-      <table className="table table-zebra w-full min-w-[350px]">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Month</th>
-            <th>Amount</th>
-            <th>Payment Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {payments.map((pay, index) => (
-            <tr key={pay._id}>
-              <td>{index + 1}</td>
-              <td>{pay.month}</td>
-              <td>${pay.amount}</td>
-              <td>{new Date(pay.date).toLocaleDateString()}</td>
-            </tr>
-          ))}
-          {payments.length === 0 && (
-            <tr>
-              <td colSpan="4" className="text-center py-4 text-gray-500">
-                No payments found.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      <h2 className="text-3xl font-bold text-center mb-8 text-[#987b53]">
+        My Payment History
+      </h2>
+
+      {isLoading ? (
+        <p className="text-center">Loading...</p>
+      ) : payments.length === 0 ? (
+        <p className="text-center text-gray-500">No payment records found.</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="table w-full table-zebra">
+            <thead className="bg-[#987b53] text-white">
+              <tr>
+                <th>#</th>
+                <th>Transaction ID</th>
+                <th>Month</th>
+                <th>Amount</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {payments.map((payment, idx) => (
+                <tr key={payment._id}>
+                  <td>{idx + 1}</td>
+                  <td className="text-sm">{payment.transactionId}</td>
+                  <td>{payment.month}</td>
+                  <td>${payment.paidAmount}</td>
+                  <td>{new Date(payment.date).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </motion.div>
   );
 };

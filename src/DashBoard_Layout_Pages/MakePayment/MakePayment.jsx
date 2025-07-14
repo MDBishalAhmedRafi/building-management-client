@@ -63,12 +63,12 @@ const MakePayment = () => {
 
     // You can send `finalAmount` to Stripe Checkout or your payment page
     localStorage.setItem("paymentData", JSON.stringify({ ...data, finalAmount }));
-    navigate("/dashboard/payment-checkout"); // Replace with actual route
+    navigate("/member-dashboard/payment-checkout");
   };
 
   return (
     <motion.div
-      className="p-4 md:p-10 max-w-4xl mx-auto bg-white shadow-md rounded-xl"
+      className="p-4 md:p-10 max-w-4xl mx-auto shadow-md rounded-xl"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
@@ -109,7 +109,7 @@ const MakePayment = () => {
 
         {/* Submit */}
         <div className="md:col-span-2">
-          <button className="btn btn-primary w-full" type="submit">
+          <button onClick={() => navigate("/member-dashboard/payment-checkout")} className="btn btn-primary w-full" type="submit">
             Pay Now
           </button>
           {discount > 0 && (
