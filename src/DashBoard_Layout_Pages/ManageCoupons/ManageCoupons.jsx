@@ -19,7 +19,7 @@ const ManageCoupons = () => {
     AOS.init({ duration: 700 });
   }, []);
 
-  // Fetch coupons
+  // ✅ Fetch coupons
   const { data: coupons = [], isLoading } = useQuery({
     queryKey: ["coupons"],
     queryFn: async () => {
@@ -28,9 +28,10 @@ const ManageCoupons = () => {
     },
   });
 
-  // Mutation for posting a coupon
+  // ✅ Add coupon
   const addCouponMutation = useMutation({
     mutationFn: async (newCoupon) => {
+      newCoupon.available = true; // Set default availability
       const res = await axiosSecure.post("/coupons", newCoupon);
       return res.data;
     },
@@ -42,6 +43,21 @@ const ManageCoupons = () => {
     },
     onError: (err) => {
       toast.error(err?.response?.data?.message || "Failed to add coupon.");
+    },
+  });
+
+  // ✅ Toggle availability
+  const toggleAvailability = useMutation({
+    mutationFn: async ({ id, available }) => {
+      const res = await axiosSecure.put(`/coupons/${id}/availability`, { available });
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["coupons"]);
+      toast.success("Coupon status updated");
+    },
+    onError: () => {
+      toast.error("Failed to update status");
     },
   });
 
@@ -72,7 +88,7 @@ const ManageCoupons = () => {
         </button>
       </div>
 
-      {/* Coupon Table */}
+      {/* ✅ Coupon Table */}
       <div className="overflow-x-auto shadow-md rounded-lg bg-white" data-aos="fade-up">
         <table className="table w-full text-sm text-left">
           <thead className="bg-orange-200 text-gray-800">
@@ -81,6 +97,8 @@ const ManageCoupons = () => {
               <th className="p-4">Coupon Code</th>
               <th className="p-4">Discount (%)</th>
               <th className="p-4">Description</th>
+              <th className="p-4 text-center">Status</th>
+              <th className="p-4 text-center">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -90,14 +108,38 @@ const ManageCoupons = () => {
                 <td className="p-4 font-medium text-gray-500">{coupon.couponCode}</td>
                 <td className="p-4 text-gray-500">{coupon.discountPercentage}%</td>
                 <td className="p-4 text-gray-500">{coupon.description}</td>
+                <td className="p-4 text-center">
+                  <span
+                    className={`badge ${
+                      coupon.available ? "badge-success" : "badge-error"
+                    }`}
+                  >
+                    {coupon.available ? "Active" : "Inactive"}
+                  </span>
+                </td>
+                <td className="p-4 text-center">
+                  <button
+                    onClick={() =>
+                      toggleAvailability.mutate({
+                        id: coupon._id,
+                        available: !coupon.available,
+                      })
+                    }
+                    className={`btn btn-xs ${
+                      coupon.available ? "btn-error" : "btn-success"
+                    }`}
+                  >
+                    {coupon.available ? "Deactivate" : "Activate"}
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {isLoading && <Loading></Loading>}
+        {isLoading && <Loading />}
       </div>
 
-      {/* Modal */}
+      {/* ✅ Add Coupon Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
           <div
@@ -137,10 +179,7 @@ const ManageCoupons = () => {
                 className="textarea textarea-bordered w-full"
               ></textarea>
 
-              <button
-                type="submit"
-                className="btn btn-success w-full"
-              >
+              <button type="submit" className="btn btn-success w-full">
                 Submit Coupon
               </button>
             </form>

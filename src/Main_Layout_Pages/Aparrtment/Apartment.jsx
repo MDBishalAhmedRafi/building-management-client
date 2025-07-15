@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/UseAxios/useAxiosSecure";
-import useAuth from "../../Hooks/UseAuth/useAuth.jsx";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import Loading from "../Loading/Loading.jsx";
 import { useLocation, useNavigate } from "react-router";
+import useAuth from "../../Hooks/UseAuth/UseAuth.jsx";
 
 const Apartment = () => {
   const axiosSecure = useAxiosSecure();

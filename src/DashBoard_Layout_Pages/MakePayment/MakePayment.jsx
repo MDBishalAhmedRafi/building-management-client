@@ -25,16 +25,16 @@ const MakePayment = () => {
 
   useEffect(() => {
     AOS.init({ duration: 800 });
-    // Fetch user's agreement data
     if (user?.email) {
       axiosSecure.get(`/agreements/user/${user.email}`).then((res) => {
         if (res.data.length) {
-          setApartment(res.data[0]);
+          const data = res.data[0];
+          setApartment(data);
           setValue("email", user.email);
-          setValue("floor", res.data[0].floor);
-          setValue("block", res.data[0].blockName);
-          setValue("room", res.data[0].apartmentNo);
-          setValue("rent", res.data[0].rent);
+          setValue("floor", data.floor);
+          setValue("block", data.blockName);
+          setValue("room", data.apartmentNo);
+          setValue("rent", data.rent);
         }
       });
     }
@@ -44,12 +44,14 @@ const MakePayment = () => {
     if (!couponCode) return toast.error("Enter a coupon code first");
     try {
       const res = await axiosSecure.get("/coupons");
-      const valid = res.data.find((c) => c.couponCode === couponCode);
+      const valid = res.data.find(
+        (c) => c.couponCode === couponCode && c.available === true
+      );
       if (valid) {
         setDiscount(valid.discountPercentage);
         toast.success(`Coupon applied: ${valid.discountPercentage}% off`);
       } else {
-        toast.error("Invalid coupon code");
+        toast.error("Invalid or inactive coupon code");
         setDiscount(0);
       }
     } catch {
@@ -61,8 +63,15 @@ const MakePayment = () => {
     const rent = parseFloat(data.rent);
     const finalAmount = discount > 0 ? rent - (rent * discount) / 100 : rent;
 
-    // You can send `finalAmount` to Stripe Checkout or your payment page
-    localStorage.setItem("paymentData", JSON.stringify({ ...data, finalAmount }));
+    localStorage.setItem(
+      "paymentData",
+      JSON.stringify({
+        ...data,
+        finalAmount,
+        couponCode: discount > 0 ? couponCode : null,
+      })
+    );
+
     navigate("/member-dashboard/payment-checkout");
   };
 
@@ -73,9 +82,14 @@ const MakePayment = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
     >
-      <h2 className="text-3xl font-bold text-center text-[#987b53] mb-6">Make Payment</h2>
+      <h2 className="text-3xl font-bold text-center text-[#987b53] mb-6">
+        Make Payment
+      </h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid grid-cols-1 md:grid-cols-2 gap-6"
+      >
         <input {...register("email")} readOnly className="input input-bordered w-full" />
         <input {...register("floor")} readOnly className="input input-bordered w-full" />
         <input {...register("block")} readOnly className="input input-bordered w-full" />
@@ -87,9 +101,10 @@ const MakePayment = () => {
           placeholder="Enter month (e.g., July 2025)"
           className="input input-bordered w-full"
         />
-        {errors.month && <p className="text-red-500 text-sm">Month is required</p>}
+        {errors.month && (
+          <p className="text-red-500 text-sm">Month is required</p>
+        )}
 
-        {/* Coupon Field */}
         <div className="md:col-span-2 flex items-center gap-3">
           <input
             type="text"
@@ -107,9 +122,8 @@ const MakePayment = () => {
           </button>
         </div>
 
-        {/* Submit */}
         <div className="md:col-span-2">
-          <button onClick={() => navigate("/member-dashboard/payment-checkout")} className="btn btn-primary w-full" type="submit">
+          <button className="btn btn-primary w-full" type="submit">
             Pay Now
           </button>
           {discount > 0 && (

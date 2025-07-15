@@ -20,11 +20,9 @@ const CheckoutForm = () => {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
 
-  // Read payment data passed via localStorage
   const paymentData = JSON.parse(localStorage.getItem("paymentData") || "{}");
   const amount = paymentData.finalAmount || 0;
 
-  // Create payment intent on backend and get clientSecret
   useEffect(() => {
     if (amount) {
       axiosSecure
@@ -36,7 +34,7 @@ const CheckoutForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous errors
+    setError("");
 
     if (!stripe || !elements || !clientSecret) {
       setError("Payment system not ready");
@@ -51,7 +49,6 @@ const CheckoutForm = () => {
 
     setProcessing(true);
 
-    // Create payment method
     const { error: paymentMethodError } = await stripe.createPaymentMethod({
       type: "card",
       card,
@@ -63,16 +60,16 @@ const CheckoutForm = () => {
       return;
     }
 
-    // Confirm card payment
-    const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card,
-        billing_details: {
-          name: user?.displayName || "Anonymous",
-          email: user?.email || "unknown",
+    const { paymentIntent, error: confirmError } =
+      await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card,
+          billing_details: {
+            name: user?.displayName || "Anonymous",
+            email: user?.email || "unknown",
+          },
         },
-      },
-    });
+      });
 
     if (confirmError) {
       setError(confirmError.message);
@@ -80,7 +77,6 @@ const CheckoutForm = () => {
       return;
     }
 
-    // Handle successful payment
     if (paymentIntent.status === "succeeded") {
       const paymentInfo = {
         email: paymentData.email,
@@ -96,6 +92,14 @@ const CheckoutForm = () => {
 
       try {
         const res = await axiosSecure.post("/payments", paymentInfo);
+
+        // Deactivate coupon if used
+        if (paymentData.couponCode) {
+          await axiosSecure.put(
+            `/coupons/${paymentData.couponCode}/deactivate`
+          );
+        }
+
         if (res.data.insertedId) {
           Swal.fire({
             icon: "success",
