@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-// Fix marker icon path issue in React
+// Fix marker icon path issue
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -28,30 +28,34 @@ const ApartmentMap = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
       viewport={{ once: true }}
-      className="px-4 md:px-20 py-16 bg-gradient-to-br from-base-200 to-base-100"
+      className="px-4 sm:px-6 md:px-10 lg:px-20 py-12 bg-gradient-to-br from-base-200 to-base-100"
     >
-      <div className="">
+      <div className="max-w-7xl mx-auto">
         <h2
-          className="text-3xl md:text-4xl font-bold text-center text-[#987b53] mb-6"
+          className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-[#987b53] mb-4 sm:mb-6"
           data-aos="fade-up"
         >
           Our Apartment Location
         </h2>
 
         <p
-          className="text-center text-lg text-[#797e82] mb-10 max-w-2xl mx-auto"
-          data-aos="fade-left"
+          className="text-sm sm:text-base md:text-lg text-center text-[#797e82] mb-6 sm:mb-10 max-w-2xl mx-auto"
+          data-aos="fade-down"
           data-aos-delay="200"
         >
           Find us in the heart of Dhaka — Shantibagh, where comfort meets convenience.
         </p>
 
         <motion.div
-          className="w-full h-[400px] rounded-xl overflow-hidden shadow-lg border border-gray-200"
+          className="w-full rounded-xl overflow-hidden shadow-md border border-gray-300"
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1 }}
           viewport={{ once: true }}
+          style={{
+            height: "60vh", // Responsive height using viewport units
+            minHeight: "300px",
+          }}
         >
           <MapContainer
             center={shantibaghCoords}

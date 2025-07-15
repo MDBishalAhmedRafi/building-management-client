@@ -63,9 +63,9 @@ const AgreementRequests = () => {
         Agreement Requests
       </h2>
 
-      <div className="overflow-x-auto bg-white shadow-lg rounded-lg" data-aos="fade-up">
+      <div className="overflow-x-auto  shadow-lg rounded-lg" data-aos="fade-up">
         <table className="table w-full">
-          <thead className="bg-[#f8f1e5] text-[#987b53] text-sm md:text-base">
+          <thead className="bg-[#987b53] text-sm md:text-base">
             <tr>
               <th>#</th>
               <th>User Info</th>

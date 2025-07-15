@@ -39,7 +39,7 @@ const MakeAnnouncement = () => {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-6 md:p-8 rounded-lg shadow-lg space-y-6"
+        className=" p-6 md:p-8 rounded-lg shadow-lg space-y-6"
         data-aos="fade-up"
       >
         <div>
@@ -64,7 +64,7 @@ const MakeAnnouncement = () => {
 
         <button
           type="submit"
-          className="btn btn-primary w-full bg-[#987b53] text-white hover:bg-[#7c633f]"
+          className="btn w-full bg-[#987b53] text-white hover:bg-[#7c633f]"
         >
           Post Announcement
         </button>

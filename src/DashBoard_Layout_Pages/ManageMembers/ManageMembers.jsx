@@ -54,7 +54,7 @@ const ManageMembers = () => {
       </h2>
 
       <div
-        className="overflow-x-auto bg-white shadow-lg rounded-lg"
+        className="overflow-x-auto shadow-lg rounded-lg"
         data-aos="fade-up"
       >
         <table className="table w-full min-w-[600px]">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AiOutlineBars,
   AiOutlineHome,
@@ -15,11 +15,18 @@ import { Link, NavLink } from "react-router";
 import { toast } from "react-toastify";
 import mainLogo from "../../assets/main_logo.png";
 import useAuth from "../../Hooks/UseAuth/UseAuth";
+import { motion } from "framer-motion";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 
 const MemberSidebar = () => {
   const [isActive, setActive] = useState(false);
   const { user, logOut } = useAuth();
+    // Initialize AOS
+      useEffect(() => {
+        AOS.init({ duration: 600 });
+      }, []);
 
   const handleToggle = () => {
     setActive(!isActive);
@@ -65,7 +72,11 @@ const MemberSidebar = () => {
       </div>
 
       {/* Sidebar */}
-      <div
+      <motion.div
+      data-aos="fade-right"
+        initial={{ x: -100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.4 }}
         className={`${
           isActive ? "block" : "hidden"
         } md:block bg-orange-50 w-64 md:fixed md:top-0 md:left-0 md:h-screen md:z-40 p-5 border-r overflow-y-auto`}
@@ -127,7 +138,7 @@ const MemberSidebar = () => {
             Logout
           </button>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };

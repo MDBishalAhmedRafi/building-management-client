@@ -7,13 +7,12 @@ import "aos/dist/aos.css";
 import useAuth from "../../Hooks/UseAuth/UseAuth";
 import Loading from "../../Main_Layout_Pages/Loading/Loading";
 
-
 const AdminProfile = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
   useEffect(() => {
-    AOS.init({ duration: 800 });
+    AOS.init({ duration: 800, once: true });
   }, []);
 
   const { data: stats = {}, isLoading } = useQuery({
@@ -36,13 +35,16 @@ const AdminProfile = () => {
     { name: "Unavailable Rooms", value: unavailable },
   ];
 
-  const COLORS = ["#BBF7D0", "#FECACA"]; // green and red shades
+  const COLORS = ["#BBF7D0", "#FECACA"];
 
-  if (isLoading) return <Loading></Loading>;
+  if (isLoading) return <Loading />;
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto">
-      <h2 className="text-3xl md:text-4xl font-bold text-center text-[#987b53] mb-10">
+      <h2
+        className="text-3xl md:text-4xl font-bold text-center text-[#987b53] mb-10"
+        data-aos="fade-up"
+      >
         Admin Profile
       </h2>
 
@@ -50,6 +52,7 @@ const AdminProfile = () => {
       <div
         className="flex flex-col items-center shadow-md rounded-xl p-6 mb-10"
         data-aos="fade-up"
+        data-aos-delay="100"
       >
         <img
           src={user?.photoURL || "https://i.ibb.co/ZK1ZLjr/user.png"}
@@ -62,35 +65,40 @@ const AdminProfile = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        <div className="bg-orange-100 text-center rounded-xl p-6 shadow-md" data-aos="zoom-in">
-          <h4 className="text-xl font-semibold text-orange-700">Total Rooms</h4>
-          <p className="text-3xl font-bold mt-2">{stats.totalRooms}</p>
-        </div>
-
-        <div className="bg-green-100 text-center rounded-xl p-6 shadow-md" data-aos="zoom-in">
-          <h4 className="text-xl font-semibold text-green-700">Available (%)</h4>
-          <p className="text-3xl font-bold mt-2">{percentageAvailable.toFixed(1)}%</p>
-        </div>
-
-        <div className="bg-red-100 text-center rounded-xl p-6 shadow-md" data-aos="zoom-in">
-          <h4 className="text-xl font-semibold text-red-700">Unavailable (%)</h4>
-          <p className="text-3xl font-bold mt-2">{percentageUnavailable.toFixed(1)}%</p>
-        </div>
-
-        <div className="bg-blue-100 text-center rounded-xl p-6 shadow-md" data-aos="zoom-in">
-          <h4 className="text-xl font-semibold text-blue-700">Total Users</h4>
-          <p className="text-3xl font-bold mt-2">{stats.totalUsers}</p>
-        </div>
-
-        <div className="bg-purple-100 text-center rounded-xl p-6 shadow-md" data-aos="zoom-in">
-          <h4 className="text-xl font-semibold text-purple-700">Total Members</h4>
-          <p className="text-3xl font-bold mt-2">{stats.totalMembers}</p>
-        </div>
+        {[
+          { title: "Total Rooms", value: stats.totalRooms, color: "orange" },
+          {
+            title: "Available (%)",
+            value: `${percentageAvailable.toFixed(1)}%`,
+            color: "green",
+          },
+          {
+            title: "Unavailable (%)",
+            value: `${percentageUnavailable.toFixed(1)}%`,
+            color: "red",
+          },
+          { title: "Total Users", value: stats.totalUsers, color: "blue" },
+          { title: "Total Members", value: stats.totalMembers, color: "purple" },
+        ].map((item, idx) => (
+          <div
+            key={idx}
+            className={`bg-${item.color}-100 text-center rounded-xl p-6 shadow-md`}
+            data-aos="fade-up"
+            data-aos-delay={100 * (idx + 1)}
+          >
+            <h4 className={`text-xl font-semibold text-${item.color}-700`}>
+              {item.title}
+            </h4>
+            <p className="text-3xl font-bold mt-2">{item.value}</p>
+          </div>
+        ))}
       </div>
 
       {/* Pie Chart */}
-      <div className="shadow-md rounded-xl p-6" data-aos="fade-up">
-        <h3 className="text-xl font-semibold mb-4 text-center">Room Availability Overview</h3>
+      <div className="shadow-md rounded-xl p-6" data-aos="fade-up" data-aos-delay="600">
+        <h3 className="text-xl font-semibold mb-4 text-center">
+          Room Availability Overview
+        </h3>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie

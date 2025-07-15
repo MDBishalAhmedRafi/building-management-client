@@ -89,7 +89,7 @@ const ManageCoupons = () => {
       </div>
 
       {/* ✅ Coupon Table */}
-      <div className="overflow-x-auto shadow-md rounded-lg bg-white" data-aos="fade-up">
+      <div className="overflow-x-auto shadow-md rounded-lg bg-[#987b5380]" data-aos="fade-up">
         <table className="table w-full text-sm text-left">
           <thead className="bg-orange-200 text-gray-800">
             <tr>
@@ -103,11 +103,11 @@ const ManageCoupons = () => {
           </thead>
           <tbody>
             {coupons.map((coupon, index) => (
-              <tr key={coupon._id} className="border-b hover:bg-orange-50 transition">
-                <td className="p-4 text-gray-500">{index + 1}</td>
-                <td className="p-4 font-medium text-gray-500">{coupon.couponCode}</td>
-                <td className="p-4 text-gray-500">{coupon.discountPercentage}%</td>
-                <td className="p-4 text-gray-500">{coupon.description}</td>
+              <tr key={coupon._id} className="border-b transition">
+                <td className="p-4 ">{index + 1}</td>
+                <td className="p-4 font-medium">{coupon.couponCode}</td>
+                <td className="p-4 ">{coupon.discountPercentage}%</td>
+                <td className="p-4">{coupon.description}</td>
                 <td className="p-4 text-center">
                   <span
                     className={`badge ${
@@ -179,7 +179,7 @@ const ManageCoupons = () => {
                 className="textarea textarea-bordered w-full"
               ></textarea>
 
-              <button type="submit" className="btn btn-success w-full">
+              <button type="submit" className="btn bg-[#987b53] w-full">
                 Submit Coupon
               </button>
             </form>
