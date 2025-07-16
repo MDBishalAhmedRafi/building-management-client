@@ -60,7 +60,7 @@ const AdminProfile = () => {
           className="w-24 h-24 rounded-full border-4 border-[#987b53] mb-4"
         />
         <h3 className="text-xl font-semibold">{user?.displayName}</h3>
-        <p className="text-gray-500">{user?.email}</p>
+        <p className="">{user?.email}</p>
       </div>
 
       {/* Stats Cards */}

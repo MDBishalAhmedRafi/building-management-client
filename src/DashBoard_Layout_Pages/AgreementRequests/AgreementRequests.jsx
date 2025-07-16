@@ -77,28 +77,32 @@ const AgreementRequests = () => {
           </thead>
           <tbody>
             {requests.map((req, index) => (
-              <tr key={req._id} className="hover:bg-orange-50">
+              <tr key={req._id} className="">
                 <td>{index + 1}</td>
                 <td>
-                  <p className="font-semibold">{req.userName}</p>
-                  <p className="text-sm text-gray-500">{req.email}</p>
+                  <p className="font-bold">{req.userName}</p>
+                  <p className="text-sm ">{req.email}</p>
                 </td>
-                <td className="text-gray-500">
-                  <span>Floor: {req.floor}</span>, <span>Block: {req.block}</span>,{" "}
-                  <span>Room: {req.apartmentNo}</span>
+                <td className="">
+                  {/* <span>Floor: {req.floor}</span>, <span>Block: {req.blockName}</span>,{" "}
+                  <span>Room: {req.apartmentNo}</span> */}
+                  <p>Floor:{req.floorNo}</p>
+                  <p>{req.blockName}</p>
+                  <p>Room: {req.apartmentNo}</p>
+
                 </td>
-                <td className="text-gray-500">${req.rent}</td>
-                <td className="text-gray-500">{new Date(req.agreementTime).toLocaleDateString()}</td>
+                <td className="">${req.rent}</td>
+                <td className="">{new Date(req.agreementTime).toLocaleDateString()}</td>
                 <td className="flex gap-2 justify-center items-center">
                   <button
                     onClick={() => handleAction(req._id, "accept", req.email)}
-                    className="btn btn-xs md:btn-sm bg-green-600 text-white hover:bg-green-700"
+                    className="btn btn-xs md:btn-sm cursor-pointer bg-green-600 text-white hover:bg-green-700"
                   >
                     Accept
                   </button>
                   <button
                     onClick={() => handleAction(req._id, "reject", req.email)}
-                    className="btn btn-xs md:btn-sm bg-red-600 text-white hover:bg-red-700"
+                    className="btn btn-xs md:btn-sm cursor-pointer bg-red-600 text-white hover:bg-red-700"
                   >
                     Reject
                   </button>

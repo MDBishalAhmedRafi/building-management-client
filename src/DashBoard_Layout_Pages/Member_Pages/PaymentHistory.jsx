@@ -31,7 +31,7 @@ const PaymentHistory = () => {
       {isLoading ? (
         <p className="text-center">Loading...</p>
       ) : payments.length === 0 ? (
-        <p className="text-center text-gray-500">No payment records found.</p>
+        <p className="text-center">No payment records found.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="table w-full table-zebra">

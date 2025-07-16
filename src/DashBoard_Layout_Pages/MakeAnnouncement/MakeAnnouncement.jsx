@@ -43,7 +43,7 @@ const MakeAnnouncement = () => {
         data-aos="fade-up"
       >
         <div>
-          <label className="block mb-2 font-semibold text-gray-700">Title</label>
+          <label className="block mb-2 font-semibold">Title</label>
           <input
             type="text"
             {...register("title", { required: true })}
@@ -53,7 +53,7 @@ const MakeAnnouncement = () => {
         </div>
 
         <div>
-          <label className="block mb-2 font-semibold text-gray-700">Description</label>
+          <label className="block mb-2 font-semibold">Description</label>
           <textarea
             {...register("description", { required: true })}
             placeholder="Write the announcement details..."

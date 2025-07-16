@@ -175,11 +175,11 @@ const Apartment = () => {
 
               <div className="md:w-1/2 p-6 flex flex-col justify-between">
                 <div>
-                  <p className="text-gray-600 mb-2">{apt.description}</p>
+                  <p className=" mb-2">{apt.description}</p>
                   <h3 className="text-2xl font-semibold text-[#987b53] mb-2">
                     Floor: <span className="text-[#797e82]">{apt.floorNo}</span>
                   </h3>
-                  <div className="text-sm text-gray-500 space-y-1">
+                  <div className="text-sm space-y-1">
                     <p>Apartment No: <span className="text-[#797e82]">{apt.apartmentNo}</span></p>
                     <p>Block: <span className="text-[#797e82]">{apt.blockName}</span></p>
                     <p>Rent: <span className="text-[#797e82]">{apt.rent} Taka</span></p>

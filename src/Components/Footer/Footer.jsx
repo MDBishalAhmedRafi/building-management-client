@@ -3,7 +3,7 @@ import { FaFacebookF, FaLinkedinIn, FaGithub, FaTwitter } from "react-icons/fa";
 import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import logo from "../../assets/main_logo.png"
 
 const Footer = () => {
@@ -28,7 +28,7 @@ const Footer = () => {
               BuildEase
             </span>
           </Link>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm ">
             A smart Building Management System <br />
             Simplify apartment and payment management.
           </p>
@@ -36,36 +36,35 @@ const Footer = () => {
 
         {/* Quick Links */}
         <div>
-          <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
-          <ul className="space-y-2 text-sm text-gray-500">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/apartment">Apartment</Link></li>
-            <li><Link to="/dashboard">Dashboard</Link></li>
-            <li><Link to="/contact">Contact Us</Link></li>
+          <h3 className="text-lg font-semibold text-[#ae825b] mb-3">Quick Links</h3>
+          <ul className="space-y-2 text-sm">
+            <li><NavLink to="/" className="hover:text-[#ae825b]">Home</NavLink></li>
+            <li><NavLink to="/apartment" className="hover:text-[#ae825b]">Apartment</NavLink></li>
+            <li><NavLink to="/contact" className="hover:text-[#ae825b]">Contact Us</NavLink></li>
           </ul>
         </div>
 
         {/* Social Icons */}
         <div>
-          <h3 className="text-lg font-semibold mb-3">Follow Us</h3>
+          <h3 className="text-lg font-semibold mb-3 text-[#ae825b]">Follow Us</h3>
           <div className="flex gap-4 text-xl">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-all">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#ae825b] transition-all">
               <FaFacebookF />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-all">
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#ae825b] transition-all">
               <FaLinkedinIn />
             </a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-all">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#ae825b] transition-all">
               <FaGithub />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-all">
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#ae825b] transition-all">
               <FaTwitter />
             </a>
           </div>
         </div>
       </div>
 
-      <div className="mt-10 border-t pt-4 text-center text-sm text-gray-400">
+      <div className="mt-10 border-t pt-4 text-center text-sm text-[#ae825b]">
         &copy; {new Date().getFullYear()} BuildEase — All rights reserved.
       </div>
     </motion.footer>

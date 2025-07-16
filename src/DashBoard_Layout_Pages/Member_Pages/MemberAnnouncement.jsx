@@ -22,17 +22,17 @@ const MemberAnnouncement = () => {
     >
       <h2 className="text-3xl font-semibold mb-6 text-center">Announcements</h2>
       {announcements.length === 0 && (
-        <p className="text-center text-gray-500">No announcements found.</p>
+        <p className="text-center">No announcements found.</p>
       )}
       <ul>
         {announcements.map(({ _id, title, message, createdAt }) => (
           <li
             key={_id}
-            className="p-4 rounded shadow mb-4 border-l-4 border-blue-600"
+            className="p-4 rounded shadow mb-4 border-l-4 border-[#987b53]"
           >
             <h4 className="text-xl font-semibold">{title}</h4>
             <p className="mt-2">{message}</p>
-            <p className="mt-2 text-sm text-gray-500">
+            <p className="mt-2 text-sm text-gray-400">
               Posted: {new Date(createdAt).toLocaleDateString()}
             </p>
           </li>

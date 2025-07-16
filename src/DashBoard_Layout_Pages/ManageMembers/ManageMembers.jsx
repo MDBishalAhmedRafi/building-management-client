@@ -83,7 +83,7 @@ const ManageMembers = () => {
               members.map((member, index) => (
                 <tr
                   key={member._id}
-                  className="border-b hover:bg-orange-50 transition duration-200"
+                  className="border-b transition duration-200"
                 >
                   <td className="px-4 py-3">{index + 1}</td>
                   <td className="px-4 py-3">{member.name}</td>
@@ -91,7 +91,7 @@ const ManageMembers = () => {
                   <td className="px-4 py-3">
                     <button
                       onClick={() => handleRemove(member.email)}
-                      className="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                      className="px-4 py-1 bg-red-500 cursor-pointer rounded hover:bg-red-600 transition"
                     >
                       Remove
                     </button>

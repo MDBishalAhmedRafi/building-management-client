@@ -31,7 +31,7 @@ const MakePayment = () => {
           const data = res.data[0];
           setApartment(data);
           setValue("email", user.email);
-          setValue("floor", data.floor);
+          setValue("floor", data.floorNo);
           setValue("block", data.blockName);
           setValue("room", data.apartmentNo);
           setValue("rent", data.rent);
@@ -116,14 +116,14 @@ const MakePayment = () => {
           <button
             type="button"
             onClick={handleCouponApply}
-            className="btn btn-outline btn-sm"
+            className="btn btn-primary btn-sm"
           >
             Apply Coupon
           </button>
         </div>
 
         <div className="md:col-span-2">
-          <button className="btn btn-primary w-full" type="submit">
+          <button className="btn bg-[#987b5380] hover:bg-[#987b53] w-full" type="submit">
             Pay Now
           </button>
           {discount > 0 && (

@@ -131,7 +131,7 @@ const CheckoutForm = () => {
           }}
         />
         <button
-          className="btn btn-primary w-full mt-4"
+          className="btn bg-[#987b5380] hover:bg-[#987b53] w-full mt-4"
           type="submit"
           disabled={!stripe || !clientSecret || processing}
         >

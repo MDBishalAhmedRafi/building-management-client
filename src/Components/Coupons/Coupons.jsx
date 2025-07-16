@@ -18,7 +18,7 @@ const Coupons = () => {
 
   if (isLoading) {
     return (
-      <div className="text-center py-10 text-gray-600 text-lg">
+      <div className="text-center py-10  text-lg">
         Loading coupons...
       </div>
     );
@@ -31,7 +31,7 @@ Exclusive Coupons Just for You!
       </h2>
 
       {coupons.length === 0 ? (
-        <p className="text-center text-gray-500">No coupons available now.</p>
+        <p className="text-center ">No coupons available now.</p>
       ) : (
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {coupons.map((coupon, index) => (
@@ -44,8 +44,8 @@ Exclusive Coupons Just for You!
             >
               <div className="p-6 flex flex-col gap-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs uppercase text-gray-500">Coupon Code</span>
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs uppercase font-bold">Coupon Code</span>
+                  <span className="text-xs ">
                     {new Date(coupon.createdAt).toLocaleDateString()}
                   </span>
                 </div>
@@ -54,17 +54,17 @@ Exclusive Coupons Just for You!
                   {coupon.couponCode}
                 </h3>
 
-                <p className="text-md text-gray-600">
+                <p className="text-md ">
                   Get{" "}
                   <span className="font-semibold text-[#ae825b]">
                     {coupon.discountPercentage}% off
                   </span>
                 </p>
 
-                <p className="text-sm text-gray-500">{coupon.description}</p>
+                <p className="text-sm ">{coupon.description}</p>
 
                 <button
-                  className="mt-4 bg-[#ae825b80] hover:bg-[#ae825b] cursor-pointer text-white rounded-full px-4 py-2 text-sm font-medium transition"
+                  className="mt-4 bg-[#ae825b80] hover:bg-[#ae825b] cursor-pointer rounded-full px-4 py-2 text-sm font-medium transition"
                   onClick={() => navigator.clipboard.writeText(coupon.couponCode)}
                 >
                   Copy Code
