@@ -22,12 +22,14 @@ import UserDashboardLayout from "../Layouts/User_Dashborad_Layout/UserDashboardL
 import UserProfile from "../DashBoard_Layout_Pages/User_Pages/UserProfile";
 import UserAnnouncements from "../DashBoard_Layout_Pages/User_Pages/UserAnnouncement";
 import CheckoutForm from "../Payment/CheckoutForm"
+import ErrorPage from "../Main_Layout_Pages/ErrorPage/ErrorPage";
 
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,
