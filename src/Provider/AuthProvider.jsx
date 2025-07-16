@@ -42,6 +42,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const logOut = () => {
+    setUser(null)
     return signOut(auth);
   };
 
@@ -59,17 +60,17 @@ const AuthProvider = ({ children }) => {
         currentUser.getIdToken().then ((idToken) => { 
           token = idToken
         })
-        const userData = {
-          email: currentUser.email,
-          name: currentUser.displayName || 'Anonymous',
-          photo: currentUser.photoURL || 'https://i.pravatar.cc/150?img=11',
-        };
+        // const userData = {
+        //   email: currentUser.email,
+        //   name: currentUser.displayName || 'Anonymous',
+        //   photo: currentUser.photoURL || 'https://i.pravatar.cc/150?img=11',
+        // };
 
-        fetch('https://recipe-book-app-server-sepia.vercel.app/users', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(userData),
-        }).catch((error) => console.error("Failed to save user:", error));
+        // fetch('https://building-management-server-orpin.vercel.app/users', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify(userData),
+        // }).catch((error) => console.error("Failed to save user:", error));
       }
       else{ token = null}
     });

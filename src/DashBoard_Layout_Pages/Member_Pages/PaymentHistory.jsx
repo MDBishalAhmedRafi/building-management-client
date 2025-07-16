@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/UseAxios/useAxiosSecure";
 import { motion } from "framer-motion";
 import useAuth from "../../Hooks/UseAuth/UseAuth";
+import Loading from "../../Main_Layout_Pages/Loading/Loading";
 
 const PaymentHistory = () => {
   const axiosSecure = useAxiosSecure();
@@ -29,7 +30,7 @@ const PaymentHistory = () => {
       </h2>
 
       {isLoading ? (
-        <p className="text-center">Loading...</p>
+        <Loading></Loading>
       ) : payments.length === 0 ? (
         <p className="text-center">No payment records found.</p>
       ) : (
