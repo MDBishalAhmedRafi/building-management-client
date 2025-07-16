@@ -38,6 +38,7 @@ const Apartment = () => {
     },
     keepPreviousData: true,
   });
+  console.log(data)
 
   const { data: userAgreements = [] } = useQuery({
     queryKey: ["userAgreements", user?.email],

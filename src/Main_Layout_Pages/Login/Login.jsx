@@ -6,14 +6,29 @@ import { toast } from "react-toastify";
 import Lottie from "lottie-react";
 import loginAnimation from "../../assets/login.json";
 import useAuth from "../../Hooks/UseAuth/UseAuth";
+import { useMutation } from "@tanstack/react-query";
+import useAxiosSecure from "../../Hooks/UseAxios/useAxiosSecure";
 
 const Login = () => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { logIn, googleLogIn } = useAuth();
+  const { logIn, googleLogIn, setUser } = useAuth();
   const emailRef = useRef();
   const location = useLocation();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
+  const saveUserMutation = useMutation(
+     
+      {
+        mutationFn:  (userData) => axiosSecure.post("/users", userData),
+        onSuccess: () => {
+          toast.success("User saved successfully!", { position: "top-right" });
+        },
+        onError: () => {
+          toast.error("Failed to save user info.", { position: "top-right" });
+        },
+      }
+    );
 
   const handleForgotPassword = () => {
     navigate("/forget-password", {
@@ -45,15 +60,29 @@ const Login = () => {
       });
   };
 
-  const handleGoogleLog = () => {
-    googleLogIn()
-      .then(() => {
-        navigate(location?.state?.from ? location.state?.from : "/");
-      })
-      .catch((error) => {
-        setError(error.code);
-      });
-  };
+  const handleGoogleLog = async () => {
+      try {
+        const result = await googleLogIn();
+        const loggedUser = result.user;
+  
+        setUser(loggedUser);
+        console.log('hoise')
+        // Save Google user to backend with default role 'user'
+        saveUserMutation.mutate({
+          email: loggedUser.email,
+          name: loggedUser.displayName || "Google User",
+          photoURL: loggedUser.photoURL,
+          role: "user",
+        });
+  
+        navigate("/");
+      } catch (error) {
+        console.log(error)
+        toast.error("Google login failed. Try again.", {
+          position: "top-right",
+        });
+      }
+    };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-base-200 to-base-100 flex items-center justify-center px-4 py-12">

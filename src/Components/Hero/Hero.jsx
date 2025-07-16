@@ -68,18 +68,18 @@ import "swiper/css/pagination";
 
 const banners = [
   {
-    title: "Discover Delicious Recipes",
-    description: "Explore top-rated dishes handpicked by our chefs.",
+    title: "Smart Living Starts Here",
+    description: "Your Building, Seamlessly Managed.",
     image: "https://i.ibb.co/rfdjp4Hj/aprtment1.png",
   },
   {
-    title: "Easy Meals for Busy Lives",
-    description: "Quick and tasty meals ready in 30 minutes or less.",
+    title: "Living Made Simple",
+    description: "One Building. One System. Complete Control.",
     image: "https://i.ibb.co/rgLjh9g/apartment3.png",
   },
   {
-    title: "Healthy & Fresh",
-    description: "Nutritious meals to power your day.",
+    title: "Where Comfort Meets Control",
+    description: "Experience Hassle-Free Living – Your Building, Your Way.",
     image: "https://i.ibb.co/fPMGS0q/apartment2.png",
   },
 ];
