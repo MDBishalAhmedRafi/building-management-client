@@ -5,9 +5,9 @@ import useRole from "../Hooks/UserRole/useRole";
 import useAuth from "../Hooks/UseAuth/UseAuth";
 
 const RoleRoute = ({ allowedRoles, children }) => {
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const { role, isLoading: roleLoading } = useRole();
-  if (authLoading || roleLoading) return <Loading />;
+  if (roleLoading) return <Loading />;
 
   if (user && allowedRoles.includes(role)) return children ? children : <Outlet />;
 

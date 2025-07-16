@@ -14,7 +14,8 @@ import {
 } from "firebase/auth";
 
 export const AuthContext = createContext();
-
+let token = null
+export const getToken = () => token
 const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
@@ -55,6 +56,9 @@ const AuthProvider = ({ children }) => {
 
       // Optional: Save user to backend
       if (currentUser?.email) {
+        currentUser.getIdToken().then ((idToken) => { 
+          token = idToken
+        })
         const userData = {
           email: currentUser.email,
           name: currentUser.displayName || 'Anonymous',
@@ -67,6 +71,7 @@ const AuthProvider = ({ children }) => {
           body: JSON.stringify(userData),
         }).catch((error) => console.error("Failed to save user:", error));
       }
+      else{ token = null}
     });
 
     return () => unsubscribe();

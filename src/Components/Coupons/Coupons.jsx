@@ -15,6 +15,7 @@ const Coupons = () => {
       return res.data;
     },
   });
+  console.log(coupons)
 
   if (isLoading) {
     return (

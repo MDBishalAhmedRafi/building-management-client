@@ -1,15 +1,17 @@
 import axios from 'axios';
 import React from 'react';
-import useAuth from '../UseAuth/UseAuth';
+import { getToken } from '../../Provider/AuthProvider';
 
 const axiosSecure = axios.create({ 
-                baseURL: `http://localhost:5000`
+                baseURL: `https://building-management-server-orpin.vercel.app`
+                // baseURL: `http://localhost:5000`
 })
 
 const useAxiosSecure = () => {
-                const {user} = useAuth()
+                const token = getToken()
                 axiosSecure.interceptors.request.use(config => { 
-                                config.headers.Authorization = `Bearer ${user?.accessToken}`
+
+                                config.headers.Authorization = `Bearer ${token}`
                                 return config;
                 }, 
 error => { 
