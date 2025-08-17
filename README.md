@@ -1,12 +1,42 @@
-# React + Vite
+# Building Management System - Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Live Link: [Building Management System](https://building-management-project.web.app/)
 
-Currently, two official plugins are available:
+This is the **client-side** of the Building Management System (BMS).  
+It is a responsive React web application that provides different role-based dashboards for **Users, Members, and Admins**.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Features
+- 🔑 **Authentication & Authorization** using Firebase (Email/Password, Google Login).
+- 🏢 **Apartment Listings** with filtering & request functionality.
+- 💳 **Payment Integration** with Stripe.
+- 🎟️ **Coupon Management** (active/inactive status applied during payment).
+- 📢 **Announcements** for members.
+- 👨‍💻 **Role-based Dashboards**:
+  - **User Dashboard:** Profile, apartment agreement request, announcements.
+  - **Member Dashboard:** Profile, payment processing, payment history, announcements.
+  - **Admin Dashboard:** Manage members, agreements, coupons, announcements.
+- 🌗 **Dark/Light Mode** support.
+- 🎨 **Modern UI/UX** with TailwindCSS + DaisyUI + Framer Motion + AOS.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠️ Technologies Used
+- **React** (Vite)
+- **Tailwind CSS** + **DaisyUI**
+- **Firebase Authentication**
+- **TanStack Query** for API data fetching
+- **Axios** for HTTP requests
+- **Stripe** for payments
+- **React Hook Form** + **SweetAlert2**
+- **Swiper.js** for carousel
+- **Lottie Animations** for UI
+
+---
+
+## 📦 Installation & Setup
+1. Clone the repository:
+   ```bash
+   git clone <your-client-repo-url>
+   cd client
